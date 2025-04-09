@@ -68,7 +68,7 @@ export default function GmRank() {
   const [inputCode, setInputCode] = useState("");
   const [opponentCode, setOpponentCode] = useState<string | null>(null);
 
-  const playerCode = "MNCH#724"; // Your main player
+  const playerCode = "TEKK#226"; // Your main player
   const options: Options = {
     tau: TAU,
     mu: 25,
@@ -123,7 +123,7 @@ export default function GmRank() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "monospace", fontSize: "1.3rem", textAlign: "center" }}>
-      <h2>Slippi Rating Predictor for The Munch</h2>
+      <h2>Slippi Rating Predictor for Tekkenz</h2>
 
       <div style={{ marginBottom: "1rem" }}>
         <label>
