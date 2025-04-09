@@ -123,7 +123,7 @@ export default function GmRank() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "monospace", fontSize: "1.3rem", textAlign: "center" }}>
-      <h2>Slippi Rating Predictor for Fox Naghmi</h2>
+      <h2>Slippi Rating Predictor for I Be Doin Weed</h2>
 
       <div style={{ marginBottom: "1rem" }}>
         <label>
