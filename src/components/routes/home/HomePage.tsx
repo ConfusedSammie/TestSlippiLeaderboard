@@ -31,7 +31,6 @@ export default function HomePage() {
   useEffect(() => {
     console.log("HomePage rendered");
   }, []);
-  return <div>Welcome to the Home Page</div>;
   const rankedPlayersOld = sortAndPopulatePlayers(playersOld)
   const oldPlayersMap = new Map(
     rankedPlayersOld.map((p) => [p.connectCode.code, p]));
