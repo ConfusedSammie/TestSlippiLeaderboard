@@ -13,14 +13,14 @@ const slippiOrdinal = (r: Rating): number =>
 // Try to extract opponent from URL hash
 const getOpponentCodeFromQuery = (): string | null => {
   if (typeof window === "undefined") return null;
-
-  const params = new URLSearchParams(window.location.search);
+  const hash = window.location.hash;
+  const queryIndex = hash.indexOf("?");
+  if (queryIndex === -1) return null;
+  const queryString = hash.slice(queryIndex + 1);
+  const params = new URLSearchParams(queryString);
   const raw = params.get("opponent");
-
   return raw ? decodeURIComponent(raw).toUpperCase() : null;
 };
-
-
 
 // Fetch Slippi player profile from API
 const fetchSlippiProfile = async (code: string) => {
@@ -153,7 +153,7 @@ export default function GmRank() {
         </button>
       </div>
 
-      <div id="textReceived">{text}</div>
+      <div>{text}</div>
     </div>
   );
 }
