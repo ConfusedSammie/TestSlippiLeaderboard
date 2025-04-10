@@ -152,7 +152,7 @@ export default function GmRank() {
         </button>
       </div>
 
-      <div>{text}</div>
+      <div id='textReceived'>{text}</div>
     </div>
   );
 }
