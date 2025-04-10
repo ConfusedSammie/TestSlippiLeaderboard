@@ -17,14 +17,17 @@ const fetchSlippiProfile = async (code: string) => {
         }
       }
     }`;
+
   const res = await fetch(SLIPPI_API, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query }),
   });
+
   const json = await res.json();
   const user = json?.data?.getConnectCode?.user;
   if (!user || !user.rankedNetplayProfile) throw new Error("Missing profile");
+
   const { ratingMu, ratingSigma, ratingOrdinal } = user.rankedNetplayProfile;
   return {
     name: user.displayName,
@@ -48,69 +51,59 @@ const options: Options = {
 export default function PredictAPI() {
   const params = new URLSearchParams(window.location.search);
   const opponentCode = decodeURIComponent(params.get("opponent") || "");
-  const playerCode = "THEC#722"; // or load dynamically
+  const isPlainText = params.get("format") === "txt";
+  const playerCode = "THEC#722";
 
-  const [json, setJson] = useState<any>(null);
+  const [output, setOutput] = useState<string>("Loading...");
 
   useEffect(() => {
-    const typeTag = document.createElement("meta");
-    typeTag.httpEquiv = "Content-Type";
-    typeTag.content = "application/json; charset=utf-8";
-    document.head.appendChild(typeTag);
-    const getPrediction = async () => {
+    if (!opponentCode) {
+      setOutput("Missing opponent code.");
+      return;
+    }
+
+    const fetchAndPredict = async () => {
       try {
         const [player, opponent] = await Promise.all([
           fetchSlippiProfile(playerCode),
           fetchSlippiProfile(opponentCode),
         ]);
+
         const [[win]] = rate(
           [[{ mu: player.mu, sigma: player.sigma }], [{ mu: opponent.mu, sigma: opponent.sigma }]],
           options
         );
+
         const [, [loss]] = rate(
           [[{ mu: opponent.mu, sigma: opponent.sigma }], [{ mu: player.mu, sigma: player.sigma }]],
           options
         );
-        setJson({
-          opponent: opponent.name,
-          current: player.ordinal.toFixed(1),
-          win: (slippiOrdinal(win) - player.ordinal).toFixed(1),
-          loss: (slippiOrdinal(loss) - player.ordinal).toFixed(1),
-        });
-      } catch (e) {
-        setJson({ error: (e as Error).message });
+
+        const winDelta = (slippiOrdinal(win) - player.ordinal).toFixed(1);
+        const lossDelta = (slippiOrdinal(loss) - player.ordinal).toFixed(1);
+
+        if (isPlainText) {
+          const msg = `${opponent.name} | Win: +${winDelta} | Loss: ${lossDelta}`;
+          document.head.innerHTML = ''; // strip react headers
+          const meta = document.createElement("meta");
+          meta.httpEquiv = "Content-Type";
+          meta.content = "text/plain; charset=utf-8";
+          document.head.appendChild(meta);
+          setOutput(msg);
+        } else {
+          setOutput(JSON.stringify({
+            opponent: opponent.name,
+            win: winDelta,
+            loss: lossDelta,
+          }, null, 2));
+        }
+      } catch (err: any) {
+        setOutput(`Error: ${err.message}`);
       }
     };
 
-    getPrediction();
-  }, [opponentCode]);
+    fetchAndPredict();
+  }, [opponentCode, isPlainText]);
 
-  if (!json) return <div>Loading...</div>;
-
-  const isPlainText = params.get("format") === "txt";
-  
-  if (isPlainText) {
-    // Set the document to mimic a plain text response
-    useEffect(() => {
-      const typeTag = document.createElement("meta");
-      typeTag.httpEquiv = "Content-Type";
-      typeTag.content = "text/plain; charset=utf-8";
-      document.head.appendChild(typeTag);
-    }, []);
-  
-    if (json.error) {
-      return <>{json.error}</>;
-    }
-  
-    return (
-      <>
-        {`${json.opponent} | Win: +${json.win} | Loss: ${json.loss}`}
-      </>
-    );
-  }
-  
-  return (
-    <pre>{JSON.stringify(json, null, 2)}</pre>
-  );
-  
+  return <pre>{output}</pre>;
 }
