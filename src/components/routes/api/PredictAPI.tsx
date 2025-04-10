@@ -87,7 +87,30 @@ export default function PredictAPI() {
 
   if (!json) return <div>Loading...</div>;
 
+  const isPlainText = params.get("format") === "txt";
+  
+  if (isPlainText) {
+    // Set the document to mimic a plain text response
+    useEffect(() => {
+      const typeTag = document.createElement("meta");
+      typeTag.httpEquiv = "Content-Type";
+      typeTag.content = "text/plain; charset=utf-8";
+      document.head.appendChild(typeTag);
+    }, []);
+  
+    if (json.error) {
+      return <>{json.error}</>;
+    }
+  
+    return (
+      <>
+        {`${json.opponent} | Win: +${json.win} | Loss: ${json.loss}`}
+      </>
+    );
+  }
+  
   return (
     <pre>{JSON.stringify(json, null, 2)}</pre>
   );
+  
 }
