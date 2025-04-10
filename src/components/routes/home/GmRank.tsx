@@ -11,20 +11,15 @@ const slippiOrdinal = (r: Rating): number =>
   ORDINAL_SCALING * (r.mu - 3 * r.sigma) + ORDINAL_OFFSET;
 
 // Try to extract opponent from URL hash
-const getOpponentCodeFromHash = (): string | null => {
+const getOpponentCodeFromQuery = (): string | null => {
   if (typeof window === "undefined") return null;
-  const hash = window.location.hash;
-  const queryIndex = hash.indexOf("opponent=");
-  if (queryIndex === -1) return null;
 
-  const raw = hash.slice(queryIndex + "opponent=".length);
-  try {
-    const decoded = decodeURIComponent(raw);
-    return decoded.toUpperCase();
-  } catch {
-    return null;
-  }
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get("opponent");
+
+  return raw ? decodeURIComponent(raw).toUpperCase() : null;
 };
+
 
 
 // Fetch Slippi player profile from API
@@ -119,12 +114,14 @@ export default function GmRank() {
   };
 
   useEffect(() => {
-    const fromURL = getOpponentCodeFromHash();
+    const fromURL = getOpponentCodeFromQuery();
     if (fromURL) {
+      setInputCode(fromURL);
       setOpponentCode(fromURL);
       predict(fromURL);
     }
   }, []);
+  
 
   return (
     <div style={{ padding: "2rem", fontFamily: "monospace", fontSize: "1.3rem", textAlign: "center" }}>
