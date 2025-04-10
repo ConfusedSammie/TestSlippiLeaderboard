@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserJSPlugin = require('terser-webpack-plugin');
 const CnameWebpackPlugin = require('cname-webpack-plugin');
 const settings = require('./settings');
-
+const CopyPlugin = require("copy-webpack-plugin");
 const mode = process.env.NODE_ENV === 'production' ? 'production' : 'development';
 const entry = path.join(__dirname, './src/index.tsx');
 const port = 8262;
@@ -76,6 +76,9 @@ module.exports = {
   },
 
   plugins: [
+    new CopyPlugin({
+      patterns: [{ from: "404.html", to: "404.html" }],
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(mode),
