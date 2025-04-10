@@ -20,21 +20,36 @@ const getPlayerConnectCodes = async (): Promise<string[]> => {
 };
 
 const getPlayers = async () => {
-  const codes = await getPlayerConnectCodes()
-  console.log(`Found ${codes.length} player codes`)
-  const allData = codes.map(code => getPlayerDataThrottled(code))
+  const codes = await getPlayerConnectCodes();
+  console.log(`Found ${codes.length} player codes`);
+
+  const allData = codes.map(code => getPlayerDataThrottled(code));
   const results = await Promise.all(allData.map(p => p.catch(e => e)));
+
   const validResults = results.filter(result => !(result instanceof Error));
-  const unsortedPlayers = validResults
-    .filter((data: any) => data?.data?.getConnectCode?.user)
-    .map((data: any) => data.data.getConnectCode.user);
-    console.log(unsortedPlayers)
-    console.log(`${results.length} results total`);
-console.log(`${validResults.length} successful results`);
-console.log(`${unsortedPlayers.length} valid user profiles`);
-  return unsortedPlayers.sort((p1, p2) =>
-    p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal)
-}
+  const users = validResults
+    .map((data: any) => data?.data?.getConnectCode?.user)
+    .filter(Boolean);
+
+    users.forEach(u => {
+      if (!u.rankedNetplayProfile) {
+        console.warn(`No ranked profile for ${u.displayName || 'Unknown user'}`);
+      }
+    });
+
+    
+  const rankedUsers = users.filter(u => u.rankedNetplayProfile && typeof u.rankedNetplayProfile.ratingOrdinal === "number");
+
+  console.log(`${results.length} results total`);
+  console.log(`${validResults.length} successful results`);
+  console.log(`${users.length} valid user objects`);
+  console.log(`${rankedUsers.length} users with ranked profiles`);
+
+  return rankedUsers.sort((p1, p2) =>
+    p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal
+  );
+};
+
 
 async function main() {
   console.log('Starting player fetch.');
