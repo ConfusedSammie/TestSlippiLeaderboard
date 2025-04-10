@@ -14,13 +14,18 @@ const slippiOrdinal = (r: Rating): number =>
 const getOpponentCodeFromHash = (): string | null => {
   if (typeof window === "undefined") return null;
   const hash = window.location.hash;
-  const queryIndex = hash.indexOf("?");
+  const queryIndex = hash.indexOf("opponent=");
   if (queryIndex === -1) return null;
-  const queryString = hash.slice(queryIndex + 1);
-  const params = new URLSearchParams(queryString);
-  const raw = params.get("opponent");
-  return raw ? decodeURIComponent(raw).toUpperCase() : null;
+
+  const raw = hash.slice(queryIndex + "opponent=".length);
+  try {
+    const decoded = decodeURIComponent(raw);
+    return decoded.toUpperCase();
+  } catch {
+    return null;
+  }
 };
+
 
 // Fetch Slippi player profile from API
 const fetchSlippiProfile = async (code: string) => {
@@ -151,7 +156,7 @@ export default function GmRank() {
         </button>
       </div>
 
-      <div>{text}</div>
+      <div id="textReceived">{text}</div>
     </div>
   );
 }
