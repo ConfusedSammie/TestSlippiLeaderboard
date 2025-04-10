@@ -4,6 +4,10 @@ import HomePage from './routes/home/HomePage';
 import GmRank from './routes/GmRank';
 import settings from '../../settings';
 import PredictionJson from './routes/PredictionJson';
+import PredictAPI from './routes/api/PredictAPI';
+
+
+
 
 export default function App() {
   return (
@@ -13,6 +17,7 @@ export default function App() {
         <Route path="/HomePage" component={HomePage} />
         <Route path="/GmRank" component={GmRank} />
         <Route path="/data/prediction.json" component={PredictionJson} />
+        <Route path="/predict" component={PredictAPI} />
         <Redirect to="/" />
       </Switch>
     </Router>
