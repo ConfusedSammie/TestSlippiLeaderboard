@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import HomePage from './routes/home/HomePage';
 import settings from '../../settings';
-import GmRank from "./routes/home/GmRank";
+import GmRank from "./routes/GmRank";
 
 export default function App() {
   return (

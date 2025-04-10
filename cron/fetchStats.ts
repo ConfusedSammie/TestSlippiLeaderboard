@@ -32,14 +32,6 @@ const getPlayers = async () => {
     console.log(`${results.length} results total`);
 console.log(`${validResults.length} successful results`);
 console.log(`${unsortedPlayers.length} valid user profiles`);
-results.forEach((r, i) => {
-  if (r instanceof Error) {
-    console.warn(`Error for ${codes[i]}: ${r.message}`);
-  } else if (!r?.data?.getConnectCode?.user) {
-    console.warn(`No user for ${codes[i]}`);
-  }
-});
-
   return unsortedPlayers.sort((p1, p2) =>
     p2.rankedNetplayProfile.ratingOrdinal - p1.rankedNetplayProfile.ratingOrdinal)
 }
@@ -63,7 +55,7 @@ async function main() {
   await fs.writeFile(timestamp, JSON.stringify({updated: Date.now()}));
   console.log('Wrote new data file and timestamp.');
   const rootDir = path.normalize(path.join(__dirname, '..'))
-  console.log('rootdir = ' + rootDir)
+  console.log(rootDir)
   // if no current git changes
   const { stdout, stderr } = await execPromise(`git -C ${rootDir} status --porcelain`);
   if(stdout || stderr) {
@@ -71,13 +63,7 @@ async function main() {
     return
   }
   console.log('Deploying.');
-  const { stdout: stdout2, stderr: stderr2 } = await execPromise(`
-    export PATH=/home/confusedsammie/.nvm/versions/node/v18.12.0/bin:$PATH && \
-    npm run --prefix ${rootDir} deploy
-  `);
-  
-  
-  
+  const { stdout: stdout2, stderr: stderr2 } = await execPromise(`npm run --prefix ${rootDir} deploy`);
   console.log(stdout2);
   if(stderr2) {
     console.error(stderr2);
