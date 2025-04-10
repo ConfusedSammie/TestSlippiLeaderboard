@@ -1,16 +1,18 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import HomePage from './routes/home/HomePage';
-import settings from '../../settings';
 import GmRank from './routes/GmRank';
+import settings from '../../settings';
 
 export default function App() {
   return (
-    <BrowserRouter basename={settings.repoPath}>
+    <Router basename={settings.repoPath}>
       <Switch>
-        <Route exact path="/HomePage" component={HomePage} />
+        <Route exact path="/" component={HomePage} />
+        <Route path="/HomePage" component={HomePage} />
         <Route path="/GmRank" component={GmRank} />
+        <Redirect to="/" />
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 }
