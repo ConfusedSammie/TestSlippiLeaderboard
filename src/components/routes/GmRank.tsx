@@ -67,7 +67,7 @@ export default function GmRank() {
   const [inputCode, setInputCode] = useState("");
   const [opponentCode, setOpponentCode] = useState<string | null>(null);
 
-  const playerCode = "UZAI#996"; // Your main player
+  const playerCode = "LILB#864"; // Your main player
   const options: Options = {
     tau: TAU,
     mu: 25,
@@ -124,7 +124,7 @@ export default function GmRank() {
 
   return (
     <div style={{ padding: "2rem", fontFamily: "monospace", fontSize: "1.3rem", textAlign: "center" }}>
-      <h2>Slippi Rating Predictor for Uzainbolt</h2>
+      <h2>Slippi Rating Predictor for lil bow wow</h2>
 
       <div style={{ marginBottom: "1rem" }}>
         <label>
