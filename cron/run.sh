@@ -2,4 +2,4 @@
 DIR_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 cd "$DIR_PATH/.."
 /home/confusedsammie/.nvm/versions/node/v18.12.0/bin/node --loader ts-node/esm --no-warnings cron/fetchStats.ts 2>&1 | tee cron/logs/log.txt
-echo "$(date) - run.sh executed" >> /tmp/cron_test.log
+echo "$(date) - run.sh executed" >> logs/cron_test.log
