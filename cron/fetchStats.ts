@@ -20,6 +20,8 @@ const getPlayerConnectCodes = async (): Promise<string[]> => {
 };
 
 const getPlayers = async () => {
+  
+  console.log('Date logged = ' + new Date());
   const codes = await getPlayerConnectCodes();
   console.log(`Found ${codes.length} player codes`);
 
