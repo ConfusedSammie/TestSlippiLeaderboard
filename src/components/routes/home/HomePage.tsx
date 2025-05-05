@@ -7,7 +7,7 @@ import timestamp from '../../../../cron/data/timestamp.json';
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime' // import plugin
 import * as settings from '../../../../settings'
-import ColoradoFlag from '../../../../images/ee2c75e98fe1d2f075cb.svg';
+import ColoradoFlag from '../../../../images/Luigi.png';
 dayjs.extend(relativeTime)
 
 
@@ -57,7 +57,7 @@ export default function HomePage() {
   return (
     <div className="flex flex-col items-center h-screen p-8">
       <h1 className="text-3xl m-4 text-center text-white">
-        YOU NEED 2192 FOR GRANDMASTER ON 21st APRIL 2025
+        YIPEEEEEEEEE
         </h1>
     
       <img className="h-48" src={ColoradoFlag} alt="colorado flag" />
